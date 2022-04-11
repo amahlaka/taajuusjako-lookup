@@ -3,14 +3,15 @@
   <head>
     {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>{% block title %}{% endblock %} - My Webpage</title>
+    <title>{% block title %}{% endblock %} - taajuusjako-lookup</title>
     {% endblock %}
   </head>
   <body>
     <div id="content">{% block content %}{% endblock %}</div>
     <div id="footer">
       {% block footer %}
-      &copy; Copyright 2022 by <a href="http://bololoo.com/Copyright">Arttu M.</a>.
+      Source for <a href="https://github.com/amahlaka/taajuusjako-lookup">taajuusjako-lookup</a> available on GitHub.
+      &copy; Copyright 2022 by <a href="https://github.com/amahlaka">Arttu M.</a>.
       {% endblock %}
     </div>
   </body>
