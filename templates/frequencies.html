@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+  {{ super() }}
+  <style type="text/css">
+    .important { color: #336699; }
+  </style>
+{% endblock %}
+{% block content %}
+  <h1>Frequency Lookups {% if title is defined %} {{ title }} {% endif %} {% if freq_high is defined and freq_low is defined %} ({{ freq_low }} - {{ freq_high }} hz) {% endif %}</h1>
+  <p class="important">
+    <table>
+        <tr>
+            <th>Class of Station</th>
+            <th>Bandwidth</th>
+            <th>Services in Finland</th>
+            <th>Frequency Band Lower Limit</th>
+            <th>Frequency Band Upper Limit</th>
+            <th>Sub-Band Lower Limit</th>
+            <th>Sub-Band Upper Limit</th>
+            <th>Sub-band Usage</th>
+            <th>Comment</th>
+            <th>Direction</th>
+        </tr>
+        {% for allocation in allocations %}
+          {% if allocation['Sub_band_usage'] in ["Amateur", "Amateur-Satellite"] %} <tr class="highlight">{% else %}<tr class='{{ allocation["Sub_band_usage"].replace(" ","-") }}'>{% endif %} 
+            <td>{{ allocation['Class_of_station'] }}</td>
+            <td>{{ allocation['Bandwidth'] }}</td>
+            <td>{{ allocation['Services_in_Finland'] }}</td>
+            <td>{{ allocation['Frequency_band_lower_limit'] }}</td>
+            <td>{{ allocation['Frequency_band_upper_limit'] }}</td>
+            <td>{{ allocation['Sub_band_lower_limit'] }}</td>
+            <td>{{ allocation['Sub_band_upper_limit'] }}</td>
+            <td>{{ allocation['Sub_band_usage'] }}</td>
+            <td>{{ allocation['Comment'] }}</td>
+            <td>{{ allocation['Direction'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

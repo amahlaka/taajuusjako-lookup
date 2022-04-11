@@ -1,0 +1,28 @@
+
+table {
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid #ddd;
+}
+
+th, td {
+  text-align: left;
+  padding: 16px;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2
+}
+
+.highlight {
+  background-color: #dde7dd;
+}
+tr.highlight:nth-child(even) {
+  background-color: #f2fcf2
+}
+tr.Maritime-mobile{
+    background-color: #dddde7
+}
+tr.Maritime-mobile:nth-child(even) {
+  background-color: #f2f2fc
+}
