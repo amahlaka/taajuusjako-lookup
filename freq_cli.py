@@ -4,76 +4,6 @@ frequencies are in HZ
 Data is downloaded using a Swagger api defined at https://opendata.traficom.fi/swagger/ui/index#/Taajuusjakotaulukko
 Endpoint: https://opendata.traficom.fi/api/v8/Taajuusjakotaulukko
 @odata.context: https://opendata.traficom.fi/OpenData/api/v8/$metadata#Taajuusjakotaulukko
-json:
-{
-    "value": [
-        {
-            "ID": "1",
-            "Frequency_band_lower_limit": "8.3 kHz",
-            "Frequency_band_upper_limit": "9 kHz",
-            "Services_in_Finland": "Radio",
-            "Sub_band_lower_limit": "8.3 kHz",
-            "Sub_band_upper_limit": "9 kHz",
-            "Sub_band_usage": "Radio"
-            "Sub_band_lower_limit__Hz_": 8300000,
-            "Sub_band_upper_limit__Hz_": 9000000
-            "Sub_band_width": "0.700 kHz"
-            },
-            {
-            "ID": 2,
-            "Frequency_band_lower_limit": "9 kHz",
-            "Frequency_band_upper_limit": "11.3 kHz",
-            "Services_in_Finland": "METEOROLOGICAL AIDS",
-            "Additional_information": "",
-            "Sub_band_lower_limit": "9 kHz",
-            "Sub_band_upper_limit": "11.3 kHz",
-            "Sub_band_lower_limit__Hz_": 9000,
-            "Sub_band_upper_limit__Hz_": 11300,
-            "Sub_band_width": "2.300 kHz",
-            "Sub_band_usage": "Meteorological Aids",
-            "Mode_of_traffic": "",
-            "Class_of_station": "",
-            "Direction": "",
-            "Radiated_power": "",
-            "Transmitter_power": 0,
-            "Channel_spacing": "",
-            "Bandwidth": "",
-            "Duplex_separation": "",
-            "Duplex_band_lower_limit": "",
-            "Duplex_band_upper_limit": "",
-            "Class_of_emission": "",
-            "Standard_type": "",
-            "Comment": "Passive system registering lightning strikes."
-            }
-}
-
-
-Data:
-    {
-        1:{
-            'Sub_band_lower_limit__Hz_': 1000,
-            'Sub_band_upper_limit__Hz_': 2000,
-            'Sub_band_usage': 'Amateur radio'
-        },
-        2:{
-            'Sub_band_lower_limit__Hz_': 1500,
-            'Sub_band_upper_limit__Hz_': 2000,
-            'Sub_band_usage': 'B'
-        },
-        3:{
-            'Sub_band_lower_limit__Hz_': 2000,
-            'Sub_band_upper_limit__Hz_': 2500,
-            'Sub_band_usage': 'C'
-        },
-        4:{
-            'Sub_band_lower_limit__Hz_': 1750,
-            'Sub_band_upper_limit__Hz_': 3000,
-            'Sub_band_usage': 'D'
-        },
-    }
-
-Input: Frequency in HZ
-Output: List of allocations where the frequency is in the range between freq_start and freq_end
 """
 
 import json
@@ -100,14 +30,12 @@ def get_allocations_with_bandwidth(center_freq, bandwidth):
     range2 = range(int(freq_low), int(freq_high))
     h_count = 0
     for allocation in data['value']:
-        print(allocation['Sub_band_lower_limit__Hz_'])
         if allocation['Sub_band_lower_limit__Hz_'] in range2 or allocation['Sub_band_upper_limit__Hz_'] in range2:
             allocations.append(allocation)
         #range1 = range(allocation['Sub_band_lower_limit__Hz_'], allocation['Sub_band_upper_limit__Hz_'])
         if allocation['Sub_band_lower_limit__Hz_'] > freq_high:
             h_count += 1
             if h_count > 10:
-                print("We are outside of the possible range")
                 break
         #if len(set(range2).intersection(range1)) > 0:
             #allocations.append(allocation['Sub_band_usage'])
@@ -161,27 +89,11 @@ def find_unique_allocations():
                 if ((list_of_ranges[i][2] == "TX" and list_of_ranges[j][2] == "RX") or (list_of_ranges[i][2] == "RX" and list_of_ranges[j][2] == "TX")) and (list_of_ranges[i][3] == list_of_ranges[j][3]):
                     continue
                 else:
-                    print("Overlapping")
                     break
         else:
             unique_allocations.append(allocations[i])
     return unique_allocations
 
-    for allocation in allocations:
-        # If the frequency range does not overlap with any other frequency range, add it to the list
-        current_frequency_range = range(allocation['Frequency_band_lower_limit_hz'], allocation['Frequency_band_upper_limit_hz'])
-        overlap = False
-        for other_allocation in allocations:
-            if allocation['ID'] == other_allocation['ID']:
-                continue
-            #other_frequency_range = range(other_allocation['Frequency_band_lower_limit_hz'], other_allocation['Frequency_band_upper_limit_hz'])
-            print(other_allocation['ID'])
-            if other_allocation['Frequency_band_lower_limit_hz'] in current_frequency_range or other_allocation['Frequency_band_upper_limit_hz'] in current_frequency_range:
-                overlap = True
-                break
-        if not overlap:
-            unique_allocations.append(allocation)
-    return unique_allocations
 
 def alloc_test(freq):
     with open('allocations.json') as f:

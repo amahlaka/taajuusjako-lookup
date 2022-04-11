@@ -1,0 +1,16 @@
+# Docker compose for running flask app using Gunicorn
+version: "3.7"
+services:
+  web:
+    build: .
+    container_name: gunicorn
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./app/:/app/
+    environment:
+      - FLASK_APP=freq_api.py
+      - FLASK_ENV=production
+      - FLASK_DEBUG=0
+    restart: always
+    command: gunicorn -w4 -b0.0.0.0:5000 freq_api:app
