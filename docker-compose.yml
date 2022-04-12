@@ -14,3 +14,27 @@ services:
       - FLASK_DEBUG=0
     restart: always
     command: gunicorn -w4 -b0.0.0.0:5000 freq_api:app
+    networks:
+      - taajuus
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - /etc/letsencrypt/:/etc/letsencrypt/
+      - /var/log/nginx/:/var/log/nginx/
+    restart: always
+    networks:
+      - taajuus
+      - testing
+
+networks:
+  taajuus:
+    driver: bridge
+  testing:
+    external: true
+    name: testing
