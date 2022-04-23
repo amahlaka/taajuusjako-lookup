@@ -8,4 +8,4 @@ RUN pip install -r requirements.txt
 
 # copy project
 COPY . .
-RUN python -c "from freq_cli import download_allocations; download_allocations(True)"
+RUN python -c "from freq_cli import download_allocations; download_allocations()"
