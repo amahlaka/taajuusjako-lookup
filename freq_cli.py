@@ -80,7 +80,7 @@ def search_by_fields(search_dict):
     return search_results
 
 
-def search_by_field_value(field,value,data = json.load(open('allocations.json'))["value"]):
+def search_by_field_value(field,value,data):
     """
     Search for a specific field value
     :param field: Field to search
