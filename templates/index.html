@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+    <title>Frequency API</title>
+{% endblock %}
+{% block content %}
+    <body>
+    <h1>Frequency API</h1>
+    <p>Search page: <a href="/search">/search</a></p>
+    <p>This is a simple API that returns the allocation of a frequency</p>
+    <p>Endpoint: /api/freq/freq  where freq is the frequency in Hz, kHz, MHz or GHz</p>
+    <p>Example: /api/freq/433MHz</p>
+    <p>Endpoint: /frequency/freq  where freq is the frequency in Hz, kHz, MHz or GHz, Returns results in HTML Table</p>
+    <p>Example: /frequency/433MHz</p>
+    <p>Endpoint: /frequency/freq/width Returns matches with freq+-width</p>
+    <p>Example: /frequency/2.4GHz/1GHz</p>
+    <p>Example: /unique-allocations</p>
+    <p>Example: /unique-allocations/field/value value can be a comma seperated list of values to filter with</p>
+    <p>Example: /unique-allocations/Sub_band_usage/amateur,amateur-satellite returns results where Sub-band Usage has any of the defined values</p>
+{% endblock %}

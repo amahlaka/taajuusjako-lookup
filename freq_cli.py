@@ -42,6 +42,22 @@ def get_allocations_with_bandwidth(center_freq, bandwidth):
     return allocations, freq_low, freq_high
 
 
+def get_entries_between_frequencies(freq_low, freq_high):
+    """
+    Get allocations between two frequencies
+    :param freq_low: Low frequency
+    :param freq_high: High frequency
+    :return: List of allocations
+    """
+    with open('allocations.json') as f:
+        data = json.load(f)
+    allocations = data['value']
+    entries = []
+    for allocation in allocations:
+        if allocation['Sub_band_lower_limit__Hz_'] in range(freq_low, freq_high) or allocation['Sub_band_upper_limit__Hz_'] in range(freq_low, freq_high):
+            entries.append(allocation)
+    return entries
+
 def get_entries_where_value_greater_than(allocations, freq_low):
     """
     allocations = [{'Sub_band_lower_limit__Hz_': 1000, 'Sub_band_upper_limit__Hz_': 2000, 'Sub_band_usage': 'Amateur radio'}, {'Sub_band_lower_limit__Hz_': 1500, 'Sub_band_upper_limit__Hz_': 2000, 'Sub_band_usage': 'B'}, {'Sub_band_lower_limit__Hz_': 2000, 'Sub_band_upper_limit__Hz_': 2500, 'Sub_band_usage': 'C'}, {'Sub_band_lower_limit__Hz_': 1750, 'Sub_band_upper_limit__Hz_': 3000, 'Sub_band_usage': 'D'}]
@@ -50,7 +66,21 @@ def get_entries_where_value_greater_than(allocations, freq_low):
     d = allocations.items()
 
 
-def search_by_field_value(field,value,data):
+def search_by_fields(search_dict):
+    """
+    Input: {"upper-frequency":"455MHz", "lower-frequency":"432MHz", "filter":{"Priority":"Primary", "Sub_band_usage":"A"}}
+    Output: [{'Sub_band_lower_limit__Hz_': 1000, 'Sub_band_upper_limit__Hz_': 2000, 'Sub_band_usage': 'A'}]
+    """
+    allocations = get_entries_between_frequencies(convert_freetext_frequency_to_hz(search_dict['lower_frequency']), convert_freetext_frequency_to_hz(search_dict['upper_frequency']))
+    search_results = []
+    filters=search_dict["filter"]
+    for allocation in allocations:
+        if all(allocation[key] == filters[key] for key in filters):
+            search_results.append(allocation)
+    return search_results
+
+
+def search_by_field_value(field,value,data = json.load(open('allocations.json'))["value"]):
     """
     Search for a specific field value
     :param field: Field to search
@@ -64,10 +94,10 @@ def search_by_field_value(field,value,data):
         print(type(allocation))
         if isinstance(value, list):
             for val in value:
-                if allocation[field].lower() == val:
+                if allocation[field] == val:
                     allocations.append(allocation)
         else:
-            if allocation[field].lower() == value:
+            if allocation[field] == value:
                 allocations.append(allocation)
     return allocations
 
@@ -137,6 +167,13 @@ def download_allocations(force_download=False):
 def convert_frequency_band_to_hz():
     data = json.load(open('allocations.json'))
     for allocation in data['value']:
+        if "Services_in_Finland" in allocation:
+            if allocation["Services_in_Finland"].isupper():
+                allocation["Priority"] = "Primary"
+                allocation["Primary"] = True
+            else:
+                allocation["Priority"] = "Secondary"
+                allocation["Primary"] = False
         if 'Frequency_band_lower_limit' in allocation:
             freq_start = convert_freetext_frequency_to_hz(allocation['Frequency_band_lower_limit'])
             freq_end = convert_freetext_frequency_to_hz(allocation['Frequency_band_upper_limit'])
@@ -168,7 +205,7 @@ def convert_freetext_frequency_to_hz(freq: str):
 def get_allocations_for_frequency(freq):
     """
     Get allocations for a specific frequency
-    :param freq: Frequency in HZ
+    :param freq: Frequency in Hz
     :return: List of allocations
     """
     freq = convert_freetext_frequency_to_hz(freq)

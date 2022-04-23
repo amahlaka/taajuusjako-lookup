@@ -1,0 +1,100 @@
+{% extends "layout.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+  {{ super() }}
+  <style type="text/css">
+    .important { color: #336699; }
+  </style>
+    <script src="{{ url_for('static', filename='search.js') }}"></script>
+    <style>
+        .search {
+            display: flex;
+        }
+        .search-box {
+            width: 100%;
+            max-width: 300px;
+            display: inline-block;
+            float: left;
+            border-radius: 4px;
+            box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+        }
+        .search-box select {
+            width: 100%;
+            padding: 12px 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+        }
+        .button-search[type="button"] {
+            width: 100%;
+            background-color: #4c74af;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+        }
+        .search-box input[type="button"] {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+        }
+        .frequencies {
+            width: 100%;
+            max-width: 300px;
+            margin-left: 2%;
+            float:left;
+            border-radius: 4px;
+            box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+        }
+    </style>
+{% endblock %}
+{% block content %}
+{# Do not include a table from frequencies #}
+<h1>Search</h1>
+<a>Usage: Select a field, enter a value for field, click add to filter</a>
+<div class="search">
+<div class="search-box">
+    <select id="field">
+        <option value="">Select a field</option>
+        <option value="Class_of_station">Class of station</option>
+        <option value="Bandwidth">Bandwidth</option>
+        <option value="Services_in_Finland">Services in Finland</option>
+        <option value="Priority">Priority</option>
+        <option value="Frequency_band_lower_limit">Frequency band lower limit</option>
+        <option value="Frequency_band_upper_limit">Frequency band upper limit</option>
+        <option value="Sub_band_lower_limit">Sub-band lower limit</option>
+        <option value="Sub_band_upper_limit">Sub-band upper limit</option>
+        <option value="Sub_band_usage">Sub-band usage</option>
+        <option value="Comment">Comment</option>
+        <option value="Direction">Direction</option>
+    </select>
+    <input type="text" placeholder="Value" id="field-value">
+    <input type="button" value="Add" onclick="add_field(document.getElementById('field'))">
+    <div id="search-filters"></div>
+  </div>
+  <div class="frequencies">
+    <input type="Text" id="lower-frequency" placeholder="Lower frequency">
+    <input type="Text" id="upper-frequency" placeholder="Upper frequency">
+    <input type="button" class="button-search" value="Search" onclick="submit_search()">
+    </div>
+</div>
+<div id="search-results"></div>
+{% endblock %}
