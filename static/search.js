@@ -2,17 +2,23 @@
 // Usage: User selects a field from a dropdown, then enters a value in the text field, Then adds it to the search filters.
 
 
+// This function is just to sanitize the input.
+// Note: as the page does not read user input from the URL, there is no "XSS" vulnerability.
+function sanitize(value) {
+    return value.replace(/[^a-zA-Z0-9 öäå \/]/gi, '');
+}
+
 // This function is called when the user selects a field from the dropdown.
 // It adds the field to the search filters.
 function add_field(field) {
-    var field_name = field.value;
-    var field_label = field.options[field.selectedIndex].text;
-    var field_value = document.getElementById("field-value").value;
+    var field_name = sanitize(field.value);
+    var field_label = sanitize(field.options[field.selectedIndex].text);
+    var field_value = sanitize(document.getElementById("field-value").value);
     if (field_value != '') {
         var field_id = field_name + '-' + field_value;
         var field_html = '<div id="' + field_id + '" class="search-field">' + field_label + ': ' + field_value + '<a href="javascript:remove_field(\'' + field_id + '\')">[x]</a></div>';
         document.getElementById('search-filters').innerHTML += field_html;
-        document.getElementById(field_name).value = '';
+        document.getElementById("field-value").value = '';
     }
 }
 

@@ -105,8 +105,13 @@ def find_unique_allocations():
     """
     Find allocations that dont overlap with any others in frequency
     """
-    with open('allocations.json') as f:
-        data = json.load(f)
+    try:
+        with open('allocations.json') as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        download_allocations()
+        with open('allocations.json') as f:
+            data = json.load(f)
     allocations = data['value']
     unique_allocations = []
     list_of_ranges = []
