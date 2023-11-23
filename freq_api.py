@@ -6,6 +6,7 @@ from requests import post
 from freq_cli import get_allocations, download_allocations, convert_freetext_frequency_to_hz, get_allocations_with_bandwidth, find_unique_allocations, search_by_field_value, alloc_test, search_by_fields
 from flask import Flask, request, jsonify, render_template, render_template_string
 import uuid
+import json
 
 ACCESS_TOKEN_LIST = ["TEST"]
 
@@ -27,6 +28,33 @@ def createaccount():
     account_id = str(uuid.uuid4())
     return account_id
 
+# For all pages, include a csp report-only header
+@app.after_request
+def add_csp_header(response):
+    """
+    Add CSP header
+    """
+    response.headers['Content-Security-Policy-Report-Only'] = "default-src 'self'; report-uri /_/csp_reports"
+    return response
+
+
+# simple test page that tries to load a external script
+@app.route('/test')
+def test():
+    """
+    Test page, contents inline
+    """
+    return """
+    <html>
+    <head>
+    <title>Test page</title>
+    </head>
+    <body>
+    <h1>Test page</h1>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    </body>
+    </html>
+    """
 
 
 
@@ -100,6 +128,43 @@ def get_unique_allocations():
     """
     allocations = find_unique_allocations()
     return render_template('frequencies.html', title="Unique Allocations", allocations=allocations)
+
+@app.route('/_/csp_reports', methods=['POST',])
+# content type must be application/csp-report
+def csp_reports():
+    """
+    Endpoint for CSP reports
+    """
+    aa = {}
+    # dump the whole request with all data, including headers and data
+    aa["body"] = request.get_json(force=True)
+    aa["headers"] = dict(request.headers)
+    aa["method"] = request.method
+    aa["path"] = request.path
+    aa["remote_addr"] = request.remote_addr
+    aa["url"] = request.url
+    aa["user_agent"] = request.user_agent.string
+    aa["referrer"] = request.referrer
+    aa["cookies"] = request.cookies
+    aa["form"] = request.form
+    aa["args"] = request.args
+    aa["files"] = request.files
+    aa["is_json"] = request.is_json
+    aa["host"] = request.host
+    aa["host_url"] = request.host_url
+    aa["scheme"] = request.scheme
+    aa["full_path"] = request.full_path
+
+    # dump the whole request with all data, including headers and data
+    with open('csp_reports.json', 'a') as outfile:
+        json.dump(aa, outfile)
+    
+
+    # return a 204 response
+    return '', 204
+
+
+
 
 @app.route('/unique-allocations/<field>/<value>')
 def filter_uniques(field: str, value: str):
