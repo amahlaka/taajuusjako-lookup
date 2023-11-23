@@ -192,17 +192,18 @@ def convert_frequency_band_to_hz():
 # "8.3 kHz" -> 8300, "9 kHz" -> 9000, "11.3 kHz" -> 11300
 def convert_freetext_frequency_to_hz(freq: str):
     freq = freq.replace(' ', '')
-    if freq.endswith('kHz'):
-        freq = freq.replace('kHz', '')
+    freq = freq.lower()
+    if freq.endswith('khz'):
+        freq = freq.replace('khz', '')
         freq = int(float(freq) * 1000)
-    elif freq.endswith('MHz'):
-        freq = freq.replace('MHz', '')
+    elif freq.endswith('mhz'):
+        freq = freq.replace('mhz', '')
         freq = int(float(freq) * 1000000)
-    elif freq.endswith('GHz'):
-        freq = freq.replace('GHz', '')
+    elif freq.endswith('ghz'):
+        freq = freq.replace('ghz', '')
         freq = int(float(freq) * 1000000000)
-    elif freq.endswith('Hz'):
-        freq = freq.replace('Hz', '')
+    elif freq.endswith('hz'):
+        freq = freq.replace('hz', '')
         freq = int(freq)
     return freq
 
