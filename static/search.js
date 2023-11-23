@@ -5,7 +5,7 @@
 // This function is just to sanitize the input.
 // Note: as the page does not read user input from the URL, there is no "XSS" vulnerability.
 function sanitize(value) {
-    return value.replace(/[^a-zA-Z0-9 öäå \/]/gi, '');
+    return value.replace(/[^a-zA-Z0-9 öäå \/ \-\_]/gi, '');
 }
 
 // This function is called when the user selects a field from the dropdown.
@@ -15,7 +15,7 @@ function add_field(field) {
     var field_label = sanitize(field.options[field.selectedIndex].text);
     var field_value = sanitize(document.getElementById("field-value").value);
     if (field_value != '') {
-        var field_id = field_name + '-' + field_value;
+        var field_id = field_name + '#' + field_value;
         var field_html = '<div id="' + field_id + '" class="search-field">' + field_label + ': ' + field_value + '<a href="javascript:remove_field(\'' + field_id + '\')">[x]</a></div>';
         document.getElementById('search-filters').innerHTML += field_html;
         document.getElementById("field-value").value = '';
@@ -39,8 +39,8 @@ function submit_search() {
     search_query['upper_frequency'] = upper_frequency;
     var search_filters = document.getElementById('search-filters').getElementsByTagName('div');
     for (var i = 0; i < search_filters.length; i++) {
-        var field_name = search_filters[i].id.split('-')[0];
-        var field_value = search_filters[i].id.split('-')[1];
+        var field_name = search_filters[i].id.split('#')[0];
+        var field_value = search_filters[i].id.split('#')[1];
         if (field_name != '' && field_value != '') {
             filters[field_name] = field_value;
         }
