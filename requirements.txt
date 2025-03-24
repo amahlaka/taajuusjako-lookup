@@ -10,7 +10,7 @@ itsdangerous==2.1.2
 Jinja2==3.1.6
 MarkupSafe==2.1.1
 pycodestyle==2.8.0
-requests==2.31.0
+requests==2.32.3
 toml==0.10.2
 urllib3==1.26.18
 Werkzeug==2.3.8
