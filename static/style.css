@@ -1,4 +1,3 @@
-
 body {
   background-color: black;
   color: white;
@@ -69,4 +68,38 @@ tr.Maritime-mobile{
 }
 tr.Maritime-mobile:nth-child(even) {
   background-color: #44fc
+}
+
+/* Media queries for responsive design */
+@media (max-width: 768px) {
+  body {
+    font-size: 1.2em;
+  }
+
+  .day, .night {
+    width: 100%;
+    height: auto;
+  }
+
+  table {
+    font-size: 0.9em;
+  }
+
+  th, td {
+    padding: 8px;
+  }
+}
+
+/* Use relative units for widths and heights */
+.day, .night {
+  width: 50%;
+  height: auto;
+}
+
+table {
+  width: 100%;
+}
+
+th, td {
+  padding: 1em;
 }
