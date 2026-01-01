@@ -1,4 +1,4 @@
-FROM python:3.13.7-alpine
+FROM python:3.14.2-alpine
 # set work directory
 WORKDIR /usr/src/app
 
