@@ -1,0 +1,39 @@
+{# Allocation table, shared by the frequency pages and the search results #}
+<div class="legend" aria-hidden="true">
+  <span class="legend__item"><span class="legend__swatch legend__swatch--amateur"></span>Amateur</span>
+  <span class="legend__item"><span class="legend__swatch legend__swatch--maritime"></span>Maritime mobile</span>
+</div>
+<div class="table-wrap">
+  <table class="alloc">
+    <thead>
+      <tr>
+        <th scope="col">Sub-band</th>
+        <th scope="col">Sub-band usage</th>
+        <th scope="col">Services in Finland</th>
+        <th scope="col">Priority</th>
+        <th scope="col">Direction</th>
+        <th scope="col">Bandwidth</th>
+        <th scope="col">Class of station</th>
+        <th scope="col">Frequency band</th>
+        <th scope="col">Comment</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for allocation in allocations %}
+      {% if allocation['Sub_band_usage'] in ["Amateur", "Amateur-Satellite"] %}<tr class="highlight">{% else %}<tr class='{{ allocation["Sub_band_usage"].replace(" ","-") }}'>{% endif %}
+        <td class="range">{{ allocation['Sub_band_lower_limit'] }}<span class="range__dash"> – </span>{{ allocation['Sub_band_upper_limit'] }}</td>
+        <td class="usage">{{ allocation['Sub_band_usage'] }}</td>
+        <td>{{ allocation['Services_in_Finland'] }}</td>
+        <td><span class="badge badge--{{ allocation['Priority']|lower }}">{{ allocation['Priority'] }}</span></td>
+        <td>{{ allocation['Direction'] }}</td>
+        <td>{{ allocation['Bandwidth'] }}</td>
+        <td>{{ allocation['Class_of_station'] }}</td>
+        <td class="range range--muted">{{ allocation['Frequency_band_lower_limit'] }}<span class="range__dash"> – </span>{{ allocation['Frequency_band_upper_limit'] }}</td>
+        <td>{{ allocation['Comment'] }}</td>
+      </tr>
+    {% else %}
+      <tr class="empty"><td colspan="9">No allocations found for this frequency. Try a wider range.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>

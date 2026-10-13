@@ -16,13 +16,25 @@ function add_field(field) {
     var field_value = sanitize(document.getElementById("field-value").value);
     if (field_value != '') {
         var field_id = field_name + '#' + field_value;
-        var field_html = '<div id="' + field_id + '" class="search-field">' + field_label + ': ' + field_value + '<a href="javascript:remove_field(\'' + field_id + '\')">[x]</a></div>';
-        document.getElementById('search-filters').innerHTML += field_html;
+        var chip = document.createElement('div');
+        chip.id = field_id;
+        chip.className = 'search-field chip';
+        var text = document.createElement('span');
+        text.textContent = field_label + ': ' + field_value;
+        var remove = document.createElement('button');
+        remove.type = 'button';
+        remove.className = 'chip__remove';
+        remove.setAttribute('aria-label', 'Remove filter ' + field_label + ': ' + field_value);
+        remove.textContent = '\u00d7';
+        remove.onclick = function() { remove_field(field_id); };
+        chip.appendChild(text);
+        chip.appendChild(remove);
+        document.getElementById('search-filters').appendChild(chip);
         document.getElementById("field-value").value = '';
     }
 }
 
-// This function is called when the user clicks the 'x' in the search filters.
+// This function is called when the user clicks the remove button on a search filter.
 // It removes the field from the search filters.
 function remove_field(field_id) {
     document.getElementById(field_id).remove();
