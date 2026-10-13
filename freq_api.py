@@ -20,6 +20,18 @@ def check_access_token(access_token):
 
 app = Flask(__name__)
 
+@app.template_filter('hz')
+def format_hz(value):
+    """
+    Format a frequency in Hz for display, e.g. 1900000000 -> "1.9 GHz"
+    """
+    if not isinstance(value, (int, float)):
+        return value
+    for unit, size in (('GHz', 1e9), ('MHz', 1e6), ('kHz', 1e3)):
+        if abs(value) >= size:
+            return '{:g} {}'.format(round(value / size, 6), unit)
+    return '{:g} Hz'.format(value)
+
 def createaccount():
     """
     Create a new account
@@ -75,7 +87,7 @@ def search():
     if request.method == 'POST':
         data = request.get_json()
         allocations = search_by_fields(data)
-        return render_template('frequencies.html', allocations=allocations)
+        return render_template('search_results.html', allocations=allocations)
     else:
         return render_template('search.html')
 

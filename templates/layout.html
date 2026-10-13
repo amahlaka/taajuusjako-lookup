@@ -1,21 +1,42 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     {% block head %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz:wght@300;500&display=swap" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}{% endblock %} - taajuusjako-lookup</title>
+    <meta name="theme-color" content="#f4f6f4" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f1b23" media="(prefers-color-scheme: dark)">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='tokens.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     {% endblock %}
   </head>
   <body>
-    <div id="content">{% block content %}{% endblock %}</div>
+    <header class="topbar">
+      <div class="topbar__inner">
+        <a class="brand" href="/">
+          <span class="brand__tile" aria-hidden="true">t</span>
+          <span class="brand__name">Taajuusjako lookup</span>
+        </a>
+        <nav class="nav" aria-label="Main">
+          <a href="/search">Search</a>
+          <a href="/">API</a>
+        </nav>
+      </div>
+    </header>
+    <main id="content" class="page">{% block content %}{% endblock %}</main>
+    <footer class="foot">
+      <div id="footer">
+        {% block footer %}
+        Source for <a href="https://github.com/amahlaka/taajuusjako-lookup">taajuusjako-lookup</a> available on GitHub.
+        &copy; Copyright 2022 by <a href="https://github.com/amahlaka">Arttu M.</a>
+        Data from <a href="https://opendata.traficom.fi/">Traficom open data</a>.
+        {% endblock %}
+      </div>
+    </footer>
   </body>
-  <footer>
-    <div id="footer">
-      {% block footer %}
-      Source for <a href="https://github.com/amahlaka/taajuusjako-lookup">taajuusjako-lookup</a> available on GitHub.
-      &copy; Copyright 2022 by <a href="https://github.com/amahlaka">Arttu M.</a>.
-      {% endblock %}
-    </div>
-  </footer>
 </html>
