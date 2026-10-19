@@ -96,6 +96,46 @@ code { font: 400 15px/22px ui-monospace, "Cascadia Mono", Consolas, monospace; o
 .badge--primary { background: var(--lake); color: var(--on-lake); }
 .badge--secondary { box-shadow: inset 0 0 0 1.5px var(--border); color: var(--ink-muted); }
 
+/* Spectrum explorer. Category colours are used on the chart, the legend and the details table. */
+:root {
+  --cat-amateur: #2c7044; --cat-maritime: #1e5b80; --cat-aero: #6b4bb3; --cat-broadcast: #c27a12;
+  --cat-radar: #b3214a; --cat-science: #8a5a2b; --cat-satellite: #12807a; --cat-srd: #a3329a;
+  --cat-cellular: #2f5fd0; --cat-fixed: #55616b; --cat-mobile: #6f7a12; --cat-other: #8a949a;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --cat-amateur: #74cc93; --cat-maritime: #7cc0e6; --cat-aero: #b9a2f0; --cat-broadcast: #f2b45a;
+    --cat-radar: #f07a98; --cat-science: #d9a46b; --cat-satellite: #5fd1c8; --cat-srd: #e592dc;
+    --cat-cellular: #8fb0ff; --cat-fixed: #a9b8bf; --cat-mobile: #c6d35a; --cat-other: #6f8591;
+  }
+}
+.hero__actions { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+.btn--icon { width: var(--space-12); padding: 0; font-size: 22px; }
+.spectrum { gap: var(--space-3); }
+.spectrum .btn { align-self: auto; }
+.spectrum__bar { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--space-3); }
+.spectrum__goto { display: flex; align-items: flex-end; gap: var(--space-2); }
+.spectrum__goto .field { width: 200px; }
+.spectrum__zoom { display: flex; gap: var(--space-2); }
+.input[aria-invalid="true"] { border-color: var(--lingon); }
+.chip--button { padding: 0 var(--space-3); border-color: var(--line); background: var(--surface-raised); cursor: pointer; animation: none; }
+.chip--button:hover { border-color: var(--lake); color: var(--lake); }
+.spectrum__range { margin: var(--space-2) 0 0; font-variant-numeric: tabular-nums; letter-spacing: 0; text-transform: none; }
+.spectrum__overview canvas { display: block; width: 100%; height: 28px; cursor: pointer; touch-action: none; border-radius: var(--radius-sm); background: var(--surface-sunken); }
+.spectrum__stage { position: relative; }
+.spectrum__stage canvas { display: block; width: 100%; cursor: grab; touch-action: pan-y; border-radius: var(--radius-sm); }
+.spectrum__stage canvas:active { cursor: grabbing; }
+.spectrum__tip { position: absolute; z-index: 2; max-width: 300px; display: flex; flex-direction: column; padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm); background: var(--surface-raised); box-shadow: var(--shadow-dialog); font-size: 14px; line-height: 20px; pointer-events: none; }
+.spectrum__tip[hidden] { display: none; }
+.spectrum__tip-meta { color: var(--ink-muted); }
+.spectrum__legend { margin: 0; gap: var(--space-2); }
+.legend__toggle { min-height: 36px; padding: 0 var(--space-2); border: 0; border-radius: var(--radius-sm); background: transparent; color: var(--ink); font: 400 13px/18px var(--font-sans); cursor: pointer; }
+.legend__toggle:hover { background: var(--surface-sunken); }
+.legend__toggle[aria-pressed="false"] { color: var(--ink-muted); text-decoration: line-through; }
+.legend__toggle[aria-pressed="false"] .legend__swatch { opacity: .25; }
+.spectrum__details-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-2); margin-bottom: var(--space-3); }
+.spectrum__details-head .section-title { margin: 0; }
+
 /* Footer */
 .foot { color: var(--ink-muted); font-size: 13px; line-height: 18px; border-top: 1px solid var(--line); }
 .foot > div { max-width: 1280px; margin: 0 auto; padding: var(--space-4) var(--space-8) var(--space-8); }
@@ -103,11 +143,18 @@ code { font: 400 15px/22px ui-monospace, "Cascadia Mono", Consolas, monospace; o
 @media (max-width: 640px) {
   .topbar__inner { padding: var(--space-2) var(--space-4); }
   .brand__name { font-size: 17px; }
+  .nav a { padding: 0 var(--space-2); }
   .page { padding: var(--space-6) var(--space-4); }
   .title--display { font-size: 32px; line-height: 40px; }
   .panel { padding: var(--space-4); }
   .search, .endpoints { grid-template-columns: 1fr; }
+  .spectrum__goto { width: 100%; }
+  .spectrum__goto .field { flex: 1; width: auto; }
   .foot > div { padding: var(--space-4); }
+}
+
+@media (max-width: 420px) {
+  .brand__name { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }

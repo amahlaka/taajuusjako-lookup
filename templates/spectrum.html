@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block title %}Spectrum explorer{% endblock %}
+{% block head %}
+  {{ super() }}
+  <script src="{{ url_for('static', filename='spectrum.js') }}" defer></script>
+{% endblock %}
+{% block content %}
+<header class="page-head">
+  <h1 class="title">Spectrum explorer</h1>
+  <p class="subtitle">Scroll or pinch to zoom, drag to move, and tap a band to see what it is used for.</p>
+</header>
+
+<section class="panel spectrum" aria-labelledby="spectrum-view">
+  <div class="spectrum__bar">
+    <form class="spectrum__goto" id="spectrum-goto">
+      <label class="field">
+        <span class="field__label">Go to frequency</span>
+        <input class="input" type="text" id="spectrum-freq" placeholder="e.g. 433 MHz" autocomplete="off">
+      </label>
+      <button type="submit" class="btn btn--primary">Go</button>
+    </form>
+    <div class="spectrum__zoom" role="group" aria-label="Zoom">
+      <button type="button" class="btn btn--secondary btn--icon" id="spectrum-zoom-in" aria-label="Zoom in">+</button>
+      <button type="button" class="btn btn--secondary btn--icon" id="spectrum-zoom-out" aria-label="Zoom out">&minus;</button>
+      <button type="button" class="btn btn--secondary" id="spectrum-reset">Whole spectrum</button>
+    </div>
+  </div>
+
+  <div class="chips spectrum__presets" id="spectrum-presets" aria-label="Jump to a range"></div>
+
+  <h2 id="spectrum-view" class="section-title spectrum__range" aria-live="polite">Loading…</h2>
+  <div class="spectrum__overview">
+    <canvas id="spectrum-overview" height="28" aria-label="Whole spectrum overview, the highlighted window is the part shown below"></canvas>
+  </div>
+  <div class="spectrum__stage" id="spectrum-stage">
+    <canvas id="spectrum-canvas" tabindex="0" aria-label="Frequency allocations chart. Arrow keys move, plus and minus zoom, Enter shows the allocations at the centre." aria-describedby="spectrum-details"></canvas>
+    <div class="spectrum__tip" id="spectrum-tip" role="tooltip" hidden></div>
+  </div>
+  <div class="legend spectrum__legend" id="spectrum-legend"></div>
+</section>
+
+<section class="results" id="spectrum-details" aria-live="polite"></section>
+{% endblock %}
