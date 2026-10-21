@@ -3,7 +3,7 @@ Simple python webserver that returns the allocation of requested frequency
 Endpoint: /api/freq/<freq> or /api/freq/<freq_str>  where <freq> is the frequency in Hz or <freq_str> is the frequency in kHz, MHz or GHz
 """
 from requests import post
-from freq_cli import get_allocations, download_allocations, convert_freetext_frequency_to_hz, get_allocations_with_bandwidth, find_unique_allocations, search_by_field_value, alloc_test, search_by_fields
+from freq_cli import get_allocations, download_allocations, convert_freetext_frequency_to_hz, get_allocations_with_bandwidth, find_unique_allocations, search_by_field_value, alloc_test, search_by_fields, get_spectrum_bands
 from flask import Flask, request, jsonify, render_template, render_template_string
 import uuid
 
@@ -123,6 +123,24 @@ def filter_uniques(field: str, value: str):
     """
     allocations = search_by_field_value(field, value.lower(), find_unique_allocations())
     return render_template('frequencies.html', title="Unique Allocations with Filters", allocations=allocations)
+
+@app.route('/api/spectrum')
+def spectrum_bands():
+    """
+    All allocations in a compact form for the spectrum explorer
+    :return: List of bands
+    """
+    response = jsonify(get_spectrum_bands())
+    response.cache_control.public = True
+    response.cache_control.max_age = 3600
+    return response
+
+@app.route('/spectrum')
+def spectrum():
+    """
+    Visual spectrum explorer
+    """
+    return render_template('spectrum.html')
 
 @app.route('/')
 def index():

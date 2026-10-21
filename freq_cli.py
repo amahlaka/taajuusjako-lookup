@@ -152,6 +152,35 @@ def get_allocations(freq):
     return allocations
 
 
+def get_spectrum_bands():
+    """
+    Compact list of every allocation for the spectrum explorer, sorted by lower limit
+    :return: List of dicts with lo/hi in Hz and the fields shown in the explorer
+    """
+    with open('allocations.json') as f:
+        data = json.load(f)
+    bands = []
+    for allocation in data['value']:
+        lo = allocation.get('Sub_band_lower_limit__Hz_')
+        hi = allocation.get('Sub_band_upper_limit__Hz_')
+        if not isinstance(lo, (int, float)) or not isinstance(hi, (int, float)) or hi <= lo:
+            continue
+        bands.append({
+            'lo': lo,
+            'hi': hi,
+            'usage': allocation.get('Sub_band_usage') or '',
+            'services': allocation.get('Services_in_Finland') or '',
+            'priority': allocation.get('Priority') or '',
+            'direction': allocation.get('Direction') or '',
+            'bandwidth': allocation.get('Bandwidth') or '',
+            'station': allocation.get('Class_of_station') or '',
+            'comment': allocation.get('Comment') or '',
+            'range': '{} – {}'.format(allocation.get('Sub_band_lower_limit') or '', allocation.get('Sub_band_upper_limit') or ''),
+        })
+    bands.sort(key=lambda band: (band['lo'], band['hi']))
+    return bands
+
+
 def download_allocations(force_download=False):
     """
     Download the allocations from the Traficom API
